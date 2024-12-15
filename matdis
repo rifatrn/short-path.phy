@@ -57,8 +57,8 @@ graph = {
 }
 
 # Contoh penggunaan
-start_node = 'A'
-end_node = 'I'
+start_node = 'V1'
+end_node = 'V9'
 shortest_distance, shortest_path = dijkstra(graph, start_node, end_node)
 
 if shortest_distance is not None:
