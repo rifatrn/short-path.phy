@@ -1,0 +1,70 @@
+# Online Python compiler (interpreter) to run Python online.
+# Write Python 3 code in this online editor and run it.
+import heapq
+
+def dijkstra(graph, start, end):
+    # Inisialisasi jarak awal ke semua node dengan nilai tak hingga
+    shortest_distances = {node: float('inf') for node in graph}
+    shortest_distances[start] = 0
+    
+    # Priority queue untuk menentukan node dengan jarak terkecil
+    priority_queue = [(0, start)]  # (jarak, node)
+    
+    # Inisialisasi jalur
+    previous_nodes = {node: None for node in graph}
+    
+    while priority_queue:
+        current_distance, current_node = heapq.heappop(priority_queue)
+        
+        # Jika jarak yang diproses lebih besar dari yang diketahui, lewati
+        if current_distance > shortest_distances[current_node]:
+            continue
+
+        # Periksa semua tetangga dari node saat ini
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+            
+            # Jika jarak baru lebih kecil, perbarui
+            if distance < shortest_distances[neighbor]:
+                shortest_distances[neighbor] = distance
+                previous_nodes[neighbor] = current_node
+                heapq.heappush(priority_queue, (distance, neighbor))
+    
+    # Rekonstruksi jalur terpendek
+    path = []
+    current = end
+    while current is not None:
+        path.insert(0, current)
+        current = previous_nodes[current]
+    
+    if shortest_distances[end] == float('inf'):
+        return None, None  # Tidak ada jalur
+
+    return shortest_distances[end], path
+
+# Contoh graph berbobot (weighted graph)
+graph = {
+    'V1': {'V2': 2, 'V4': 1},
+    'V2': {'V3': 3, 'V5': 7},
+    'V3': {'V6': 1},
+    'V4': {'V2': 5, 'V7': 4},
+    'V5': {'V6': 3, 'V8': 7},
+    'V6': {'V9': 2},
+    'V7': {'V8': 4},
+    'V8': {'V9': 1},
+    'V9': {},
+    
+}
+
+# Contoh penggunaan
+start_node = 'A'
+end_node = 'I'
+shortest_distance, shortest_path = dijkstra(graph, start_node, end_node)
+
+if shortest_distance is not None:
+    print(f"Jarak terpendek dari {start_node} ke {end_node} adalah {shortest_distance}")
+    print(f"Jalur terpendek: {' -> '.join(shortest_path)}")
+else:
+    print(f"Tidak ada jalur dari {start_node} ke {end_node}")
+
+print("Try programiz.pro")
